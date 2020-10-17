@@ -1,0 +1,58 @@
+name: Build Magisk phh
+
+on:
+  push:
+    branches: [ standalone_17.1 ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build-Magisk
+      run: |
+        wget https://github.com/topjohnwu/magisk_files/raw/canary/magisk-debug.zip
+        unzip magisk-debug.zip
+        rm -rf common/boot_patch.sh
+        mv boot_patch.sh common/boot_patch.sh 
+        zip -r magisk-phh.zip ./ -x '*.zip'
+  
+    - name: Copy release file
+      run: |
+        mkdir release
+        cp -r magisk-phh.zip release
+        
+    - name: Save build file to artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: release
+        path: release/*
+        
+    - name : Date
+      id: date
+      run: echo "::set-output name=date::$(date +"%d-%m-%Y")"
+
+    - name: Create Release
+      id: create_release 
+      uses: actions/create-release@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NTAG_NAME: ${{ steps.date.outputs.date }}
+      with:
+          tag_name: ${{ steps.date.outputs.date }}
+          release_name: Release ${{ steps.date.outputs.date }}
+          draft: false
+          prerelease: false
+
+    - name: Upload Release Magisk PHH
+      id: upload-release-magisk-phh
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./release/magisk-phh.zip
+          asset_name: magisk-phh.zip
+          asset_content_type: application/octet-stream
