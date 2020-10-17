@@ -2,7 +2,7 @@ name: Build Magisk phh
 
 on:
   push:
-    branches: [ standalone_17.1 ]
+    branches: [ main ]
 
 jobs:
   build:
