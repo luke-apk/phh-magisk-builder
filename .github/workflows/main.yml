@@ -15,8 +15,8 @@ jobs:
       run: |
         wget https://github.com/topjohnwu/magisk_files/raw/canary/app-debug.apk
         unzip app-debug.apk
-        rm -rf common/boot_patch.sh
-        mv boot_patch.sh common/boot_patch.sh 
+        rm -rf assets/boot_patch.sh
+        mv boot_patch.sh assets/boot_patch.sh 
         zip -r app-debug-phh.apk ./ -x '*.apk'
   
     - name: Copy release file
