@@ -17,12 +17,12 @@ jobs:
         unzip app-debug.apk
         rm -rf assets/boot_patch.sh
         mv boot_patch.sh assets/boot_patch.sh 
-        zip -r app-debug-phh.apk ./ -x '*.apk'
+        zip -r app-debug-phh.zip ./ -x '*.apk'
   
     - name: Copy release file
       run: |
         mkdir release
-        cp -r app-debug-phh.apk release
+        cp -r app-debug-phh.zip release
         
     - name: Save build file to artifact
       uses: actions/upload-artifact@v2
