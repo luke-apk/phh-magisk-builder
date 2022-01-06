@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Build-Magisk
       run: |
-        wget https://github.com/topjohnwu/magisk_files/raw/canary/app-debug.apk
+        wget https://cdn.jsdelivr.net/gh/topjohnwu/magisk-files@b368d20076a30879ccd289b8a4766ba3b88da547/app-debug.apk
         unzip app-debug.apk
         rm -rf assets/boot_patch.sh
         mv boot_patch.sh assets/boot_patch.sh 
